@@ -15,7 +15,8 @@
   {% if rtl %}
   <link rel="stylesheet" href="{{ url_for('static', filename='css/searx-rtl.min.css') }}" type="text/css" media="screen" />
   {% else %}
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/searx.min.css') }}" type="text/css" media="screen" />
+  <!-- TODO change back to searx.min.css -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/searx.css') }}" type="text/css" media="screen" />
   {% endif %}
   {% block styles %}{% endblock %}
   <!--[if gte IE 9]>-->
@@ -48,16 +49,9 @@
     {% block content %}
     {% endblock %}
   </main>
-  <footer>
-    <p>
-    {{ _('Powered by') }} <a href="{{ url_for('about') }}">searx</a> - {{ searx_version }} - {{ _('a privacy-respecting, hackable metasearch engine') }}<br/>
-        <a href="{{ brand.GIT_URL }}">{{ _('Source code') }}</a> |
-        <a href="{{ brand.ISSUE_URL }}">{{ _('Issue tracker') }}</a> |
-        <a href="{{ brand.PUBLIC_INSTANCES }}">{{ _('Public instances') }}</a>
-    </p>
-  </footer>
   <!--[if gte IE 9]>-->
-  <script src="{{ url_for('static', filename='js/searx.min.js') }}"></script>
+  <!-- TODO change back to searx.min.js -->
+  <script src="{{ url_for('static', filename='js/searx.js') }}"></script>
   <!--<![endif]-->
 </body>
 </html>
