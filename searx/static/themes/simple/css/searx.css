@@ -1279,8 +1279,13 @@ select:focus {
     font-size: 1em;
   }
 }
+
+#main_index {
+  margin-top: 2vh;
+}
+
 #main_preferences form {
-  width: 100%;
+  width: 950%;
 }
 #main_preferences fieldset {
   margin: 8px;
@@ -1463,6 +1468,9 @@ select:focus {
   #categories .checkbox_container {
     margin-top: 2px;
     margin: auto;
+  }
+  #main_index {
+    margin-top: 5vh;
   }
   html.touch #main_index #categories_container,
   html.touch #main_results #categories_container {
@@ -1985,12 +1993,9 @@ article.result-images[data-vim-selected]::before {
   width: 200em;
 }
 #linkto_preferences {
-  position: absolute;
-  right: 10px;
-  top: 0.9em;
   padding: 0;
   border: 0;
-  display: block;
+  display: inline-block;
   font-size: 1.2em;
   color: #222;
 }
@@ -2028,7 +2033,24 @@ article.result-images[data-vim-selected]::before {
   margin: 0;
   padding: 0.6em;
 }
+
+#toggle_search_filters {
+  display: none;
+}
+
+#search_filters_display {
+  display: none;
+}
+
+#toggle_search_filters:checked ~ #search_filters_display {
+  display: block;
+}
+
 @media screen and (max-width: 75em) {
+  main {
+    width: 95%;
+    margin: 0 auto;
+  }
   #main_preferences,
   #main_about,
   #main_stats {

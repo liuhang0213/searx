@@ -6,13 +6,18 @@
       <button id="send_search" type="submit" tabindex="-1"><span class="hide_if_nojs">{{ icon('search') }}</span><span class="show_if_nojs">{{ _('Start search') }}</span></button>
     </div>
     <div class="search_filters">
-      {% include 'simple/languages.html' %}
-      {% include 'simple/time-range.html' %}
+      <label class="hide_if_nojs" for="toggle_search_filters">{{ icon('chevron-right') }}</label><label class="show_if_nojs" for="toggle_search_filters">{{ _('Options') }}</label>
+      <input id="toggle_search_filters" type="checkbox"/>
+      <div id="search_filters_display">
+        {% include 'simple/languages.html' %}
+        {% include 'simple/time-range.html' %}
+        <div id="linkto_preferences"><a href="{{ url_for('preferences') }}">Preferences</a></div>
+        {% include 'simple/categories.html' %}
+        {% set display_tooltip = true %}
+        <input type="hidden" name="safesearch" value="{{ safesearch }}" >
+        <input type="hidden" name="theme" value="{{ theme }}" >
+      </div>
     </div>
   </div>
-  {% set display_tooltip = true %}
-  {% include 'simple/categories.html' %}
-  <input type="hidden" name="safesearch" value="{{ safesearch }}" >
-  <input type="hidden" name="theme" value="{{ theme }}" >
   {% if timeout_limit %}<input type="hidden" name="timeout_limit" value="{{ timeout_limit|e }}" >{% endif %}
 </form>
