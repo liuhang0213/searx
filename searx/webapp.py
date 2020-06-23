@@ -144,7 +144,7 @@ if not searx_debug \
 
 babel = Babel(app)
 
-rtl_locales = ['ar', 'arc', 'bcc', 'bqi', 'ckb', 'dv', 'fa', 'glk', 'he',
+rtl_locales = ['ar', 'arc', 'bcc', 'bqi', 'ckb', 'dv', 'fa', 'fa_IR', 'glk', 'he',
                'ku', 'mzn', 'pnb', 'ps', 'sd', 'ug', 'ur', 'yi']
 
 # used when translating category names
@@ -355,17 +355,12 @@ def render(template_name, override_theme=None, **kwargs):
                              if (engine_name, category) not in disabled_engines)
 
     if 'categories' not in kwargs:
-        kwargs['categories'] = ['general']
-        kwargs['categories'].extend(x for x in
-                                    sorted(categories.keys())
-                                    if x != 'general'
-                                    and x in enabled_categories)
+        kwargs['categories'] = [x for x in
+                                _get_ordered_categories()
+                                if x in enabled_categories]
 
     if 'all_categories' not in kwargs:
-        kwargs['all_categories'] = ['general']
-        kwargs['all_categories'].extend(x for x in
-                                        sorted(categories.keys())
-                                        if x != 'general')
+        kwargs['all_categories'] = _get_ordered_categories()
 
     if 'selected_categories' not in kwargs:
         kwargs['selected_categories'] = []
@@ -430,6 +425,7 @@ def render(template_name, override_theme=None, **kwargs):
     kwargs['brand'] = brand
 
     kwargs['scripts'] = set()
+    kwargs['endpoint'] = 'results' if 'q' in kwargs else request.endpoint
     for plugin in request.user_plugins:
         for script in plugin.js_dependencies:
             kwargs['scripts'].add(script)
@@ -441,6 +437,17 @@ def render(template_name, override_theme=None, **kwargs):
 
     return render_template(
         '{}/{}'.format(kwargs['theme'], template_name), **kwargs)
+
+
+def _get_ordered_categories():
+    ordered_categories = []
+    if 'categories_order' not in settings['ui']:
+        ordered_categories = ['general']
+        ordered_categories.extend(x for x in sorted(categories.keys()) if x != 'general')
+        return ordered_categories
+    ordered_categories = settings['ui']['categories_order']
+    ordered_categories.extend(x for x in sorted(categories.keys()) if x not in ordered_categories)
+    return ordered_categories
 
 
 @app.before_request
@@ -942,7 +949,7 @@ def opensearch():
 
     resp = Response(response=ret,
                     status=200,
-                    mimetype="text/xml")
+                    mimetype="application/opensearchdescription+xml")
     return resp
 
 
@@ -1012,6 +1019,14 @@ def config():
         'doi_resolvers': [r for r in settings['doi_resolvers']],
         'default_doi_resolver': settings['default_doi_resolver'],
     })
+
+
+@app.route('/translations.js')
+def js_translations():
+    return render(
+        'translations.js.tpl',
+        override_theme='__common__',
+    ), {'Content-Type': 'text/javascript; charset=UTF-8'}
 
 
 @app.errorhandler(404)
